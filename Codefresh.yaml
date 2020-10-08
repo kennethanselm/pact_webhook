@@ -6,7 +6,7 @@ version: "1.0"
 stages:
   - "clone"
   - "test"
-  - "build"
+  - "build" 
 
 steps:
   clone:
