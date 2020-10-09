@@ -91,7 +91,7 @@ public class CreatePactWebhookApplication implements CommandLineRunner {
                     String strPipelineName = (String) data.get("pipelineName");
                     LOG.info("strConsumerName= {}, strProviderName= {}, strProjectName= {} ", strConsumerName, strProviderName, strProjectName);
                     //GET for http://localhost:8500/webhooks/provider/inventory_provider/consumer/inventory_consumer
-                    Boolean blWebhookPresent = isGivenConsumerWehookExists(strConsumerName, strProviderName);
+                    Boolean blWebhookPresent =isGivenConsumerWehookExists(strConsumerName, strProviderName);
                     //If Webhook not exists create a new webhook
                     LOG.info("Webhook exists= {}", blWebhookPresent);
                     if (!blWebhookPresent) {
@@ -117,7 +117,9 @@ public class CreatePactWebhookApplication implements CommandLineRunner {
                 "'headers':{'Accept':'application/json'," +
                 "'Authorization':'bearer "+strApiKey+"'}},"+
                 "'events':[{'name':'"+strEventName+"'}],"+
-                "'body':{'trigger':'"+triggerName+"','type':'build','repoOwner':'"+repoOwner+"','repoName':'"+repoName+"','serviceId':'"+serviceId+"','branch':'"+codeFreshBranch+"'}"+
+                "'body':{'trigger':'"+triggerName+"','type':'build','repoOwner':'"+repoOwner+"'" +
+                ",'repoName':'"+repoName+"','serviceId':'"+serviceId+"'," +
+                "'branch':'"+codeFreshBranch+"','variables' : {'IS_CONTRACT_CONSUMER':false ,'IS_CONTRACT_PROVIDER' :true , 'IS_WEBHOOK_CREATION_REQUIRED' : false }}"+
                 "}";
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = (JsonObject) jsonParser.parse(jsonString);
@@ -132,7 +134,7 @@ public class CreatePactWebhookApplication implements CommandLineRunner {
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
                 .build();
-
+        LOG.info("My request String is = {}",request.toString());
         HttpResponse<String> createResponse = client.send(request,HttpResponse.BodyHandlers.ofString());
         String strResponseCreateWebhook = createResponse.body();
         int intResponseCode = createResponse.statusCode();
