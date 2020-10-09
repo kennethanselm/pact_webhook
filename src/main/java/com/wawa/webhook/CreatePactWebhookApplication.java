@@ -119,7 +119,7 @@ public class CreatePactWebhookApplication implements CommandLineRunner {
                 "'events':[{'name':'"+strEventName+"'}],"+
                 "'body':{'trigger':'"+triggerName+"','type':'build','repoOwner':'"+repoOwner+"'" +
                 ",'repoName':'"+repoName+"','serviceId':'"+serviceId+"'," +
-                "'branch':'"+codeFreshBranch+"','variables' : {'IS_CONTRACT_CONSUMER':false ,'IS_CONTRACT_PROVIDER' :true , 'IS_WEBHOOK_CREATION_REQUIRED' : false }}"+
+                "'branch':'"+codeFreshBranch+"','variables' : {'IS_CONTRACT_CONSUMER':'false' ,'IS_CONTRACT_PROVIDER' :'true' , 'IS_WEBHOOK_CREATION_REQUIRED' : 'false' }}"+
                 "}";
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = (JsonObject) jsonParser.parse(jsonString);
