@@ -48,6 +48,22 @@ public class CreatePactWebhookApplication implements CommandLineRunner {
     @Value( "${pact.codefresh.url}" )
     private String strPactCodeFreshBaseUrl;
 
+    @Value( "${pact.codefresh.trigger.name}" )
+    private String triggerName;
+
+    @Value( "${pact.codefresh.repo.owner}" )
+    private String repoOwner;
+
+    @Value( "${pact.codefresh.repo.name}" )
+    private String repoName;
+
+    @Value( "${pact.codefresh.repo.serviceId}" )
+    private String serviceId;
+
+    @Value( "${pact.codefresh.repo.branch}" )
+    private String codeFreshBranch;
+
+
     public static void main(String[] args) {
         SpringApplication.run(CreatePactWebhookApplication.class, args);
     }
@@ -94,13 +110,14 @@ public class CreatePactWebhookApplication implements CommandLineRunner {
     */
     private void createOneWebhook(String sConsumer, String sProvider, String sProjectName, String sPipelinename) throws IOException, InterruptedException{
         LOG.info("Inside createOneWebhook.....");
-        String strTriggerURL=strPactCodeFreshBaseUrl+sProjectName+"%2F"+sPipelinename+"/";
+        String strTriggerURL=strPactCodeFreshBaseUrl+serviceId;
         String jsonString = "{'consumer':{'name':'"+sConsumer+"'},"+
                 "'request':{'method':'POST',"+
                 "'url':'"+strTriggerURL+"',"+
                 "'headers':{'Accept':'application/json'," +
                 "'Authorization':'bearer "+strApiKey+"'}},"+
                 "'events':[{'name':'"+strEventName+"'}]"+
+                "'body':{'trigger':'"+triggerName+"' , 'type' : 'build' ,'repoOwner':'"+repoOwner+"' ,'repoName':'"+repoName+"' , 'serviceId':'"+serviceId+"' ,'branch':'"+codeFreshBranch+"' }"+
                 "}";
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = (JsonObject) jsonParser.parse(jsonString);
